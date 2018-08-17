@@ -12,8 +12,6 @@ URI 包含 URL 和 URN，目前 WEB 只有 URL 比较流行，所以见到的基
 
 ### 1. 请求报文
 
-<div align="center"> <img src="../img//HTTP_RequestMessageExample.png" width=""/> </div><br>
-
 ![](../img/123412431234.png)
 
 ### 2. 响应报文
