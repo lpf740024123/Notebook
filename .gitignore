@@ -4,6 +4,7 @@
 out/
 build/
 logs/
+.vscode/
 
 .DS_Store
 *.iml
