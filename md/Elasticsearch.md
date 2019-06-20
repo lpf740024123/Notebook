@@ -54,3 +54,78 @@ curl -XGET 'http://localhost:9200/_count?pretty' -d '
     }
 }
 ```
+
+### 倒排索引
+
+Elasticsearch 使用一种称为 倒排索引 的结构，它适用于快速的全文搜索。一个倒排索引由文档中所有不重复词的列表构成，对于其中每个词，有一个包含它的文档列表。
+
+- The quick brown fox jumped over the lazy dog
+- Quick brown foxes leap over lazy dogs in summer
+
+为了创建倒排索引，我们首先将每个文档的 content 域拆分成单独的 词（我们称它为 词条 或 tokens ），创建一个包含所有不重复词条的排序列表，然后列出每个词条出现在哪个文档。
+
+***
+|Term|Doc_1|Doc_2|
+|---|---|---|
+Quick   |       |  X
+The     |   X   |
+brown   |   X   |  X
+dog     |   X   |
+dogs    |       |  X
+fox     |   X   |
+foxes   |       |  X
+in      |       |  X
+jumped  |   X   |
+lazy    |   X   |  X
+leap    |       |  X
+over    |   X   |  X
+quick   |   X   |
+summer  |       |  X
+the     |   X   |
+***
+
+### 分析与分析器
+
+分析 包含下面的过程：
+
+- 首先，将一块文本分成适合于倒排索引的独立的 词条 ，
+- 之后，将这些词条统一化为标准格式以提高它们的“可搜索性”，或者 recall
+
+分析器 实际上是将三个功能封装到了一个包里：
+
+- 字符过滤器
+
+  首先，字符串按顺序通过每个 字符过滤器 。他们的任务是在分词前整理字符串。一个字符过滤器可以用来去掉HTML，或者将 & 转化成 `and`。
+
+- 分词器
+
+  其次，字符串被 分词器 分为单个的词条。一个简单的分词器遇到空格和标点的时候，可能会将文本拆分成词条。
+
+- Token 过滤器
+
+  最后，词条按顺序通过每个 token 过滤器 。这个过程可能会改变词条（例如，小写化 Quick ），删除词条（例如， 像 `a`， `and`， `the` 等无用词），或者增加词条（例如，像 jump 和 leap 这种同义词）。
+
+### 内置分析器
+
+"Set the shape to semi-transparent by calling set_trans(5)"
+
+- 标准分析器
+
+  标准分析器是Elasticsearch默认使用的分析器。它是分析各种语言文本最常用的选择。它根据 Unicode 联盟 定义的 单词边界 划分文本。删除绝大部分标点。最后，将词条小写。它会产生
+
+  set, the, shape, to, semi, transparent, by, calling, set_trans, 5
+
+- 简单分析器
+
+  简单分析器在任何不是字母的地方分隔文本，将词条小写。它会产生
+
+  set, the, shape, to, semi, transparent, by, calling, set, trans
+
+- 空格分析器
+
+  空格分析器在空格的地方划分文本。它会产生
+
+  Set, the, shape, to, semi-transparent, by, calling, set_trans(5)
+
+- 语言分析器
+
