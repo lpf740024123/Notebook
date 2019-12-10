@@ -167,7 +167,7 @@ sr0              11:0    1   792M  0 rom
 ```
 2. 列出装置的 UUID 等参数
 ```
-[root@localhost zzf]# blkid
+[root@localhost zzf]# blkid 
 /dev/sda1: UUID="0a311ec7-b2fa-4302-8130-b87708473819" TYPE="xfs" 
 /dev/sda2: UUID="22gFEh-1GJe-CB78-4uRf-mFp0-VFfu-8I4OqH" TYPE="LVM2_member" 
 /dev/sr0: UUID="2017-09-05-14-14-50-00" LABEL="CentOS 7 x86_64" TYPE="iso9660" PTTYPE="dos" 

@@ -11,5 +11,6 @@ logs/
 
 .classpath
 .project
+.class
 
 /md/CDN.md
